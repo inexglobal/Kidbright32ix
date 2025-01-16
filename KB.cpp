@@ -251,6 +251,7 @@ bool KB::getPixel(int16_t x, int16_t y) // For KIDBRIGHT32ix ONLY - KRITTAMET TH
 }
 void KB::display(double x1, double y1, int TYPE) // For KIDBRIGHT32ix ONLY - KRITTAMET THAWONG
 {
+  if ((x < 0) || (y < 0) || (x > 15) || (y > 7)) return;
   matrix.setRotation(1);
   uint16_t i;
   uint16_t bar;
