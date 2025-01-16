@@ -224,6 +224,94 @@ void KB::displayBegin(void) {
     matrix.setRotation(1);
     matrix.setTextWrap(false);
 }
+bool KB::getPixel(int16_t x, int16_t y) // For KIDBRIGHT32ix ONLY - KRITTAMET THAWONG
+{
+  if ((y < 0) || (x < 0))
+    return false;
+  if ((matrix.getRotation() % 2 == 0) && ((y >= 16) || (x >= 8)))
+    return false;
+  if ((matrix.getRotation() % 2 == 1) && ((x >= 16) || (y >= 8)))
+    return false;
+
+  // check rotation, move pixel around if necessary
+  if (matrix.getRotation() == 1)
+  {
+    y = 8 - y - 1;
+    if (x >= 8)
+    {
+      x -= 8;
+      y += 8;
+    }
+    return (matrix.displaybuffer[x] & (1 << y));
+  }
+  else
+  {
+    return false;
+  }
+}
+void KB::display(double x1, double y1, int TYPE) // For KIDBRIGHT32ix ONLY - KRITTAMET THAWONG
+{
+  matrix.setRotation(1);
+  uint16_t i;
+  uint16_t bar;
+  uint8_t x = (uint8_t)x1;
+  uint8_t y = (uint8_t)y1;
+  y = 8 - y - 1;
+  if (x >= 8)
+  {
+    x -= 8;
+    y += 8;
+  }
+  switch (TYPE)
+  {
+  case 0: // PLOT
+    matrix.displaybuffer[x] |= (1 << y);
+    break;
+  case 1: // UNPLOT
+    matrix.displaybuffer[x] &= ~(1 << y);
+    break;
+  case 2: // TOGGLE
+    matrix.displaybuffer[x] ^= (1 << y);
+    break;
+  case 3: // BARGRAPH
+    bar = 0;
+    if((uint8_t)x1 >= 8) y -= 8;
+    for (i = 0; i <= y; ++i)
+    {
+      bar = (bar << 1) + 1;
+    }
+    if((uint8_t)x1 >= 8) matrix.displaybuffer[x] |= bar << 8;
+    else matrix.displaybuffer[x] |= bar;
+    break;
+  }
+  matrix.writeDisplay();
+}
+void KB::moveDisplay(int TYPE) { // For KIDBRIGHT32ix ONLY - KRITTAMET THAWONG
+  matrix.setRotation(1);
+  uint8_t i;
+	uint8_t tempHighByte, tempLowByte;
+
+	switch (TYPE) {
+		case 0:
+			tempHighByte = (matrix.displaybuffer[0] >> 8) & 0xFF;
+			for (i = 0; i < 7; i++) {
+				matrix.displaybuffer[i] = matrix.displaybuffer[i+1];
+			}
+      matrix.displaybuffer[7] &= 0x00FF;
+      matrix.displaybuffer[7] = tempHighByte;
+		break;
+
+		case 1:
+      tempLowByte = matrix.displaybuffer[7] & 0xFF;
+			for (i = 7; i > 0; i--) {
+				matrix.displaybuffer[i] = matrix.displaybuffer[i-1];
+			}
+      matrix.displaybuffer[0] &= 0xFF00;
+      matrix.displaybuffer[0] = tempLowByte << 8;
+		break;
+	}
+  matrix.writeDisplay();
+}
 void KB::setBrightness(uint8_t b) {
 	matrix.setBrightness(b);
 }

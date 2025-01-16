@@ -48,6 +48,14 @@
 #define IN4 4
 
 #define sound tone
+
+#define TYPE_PLOT 0
+#define TYPE_UNPLOT 1
+#define TYPE_TOGGLE	2
+#define TYPE_BARGRAPH 3
+
+#define TYPE_SHIFT_LEFT 0
+#define TYPE_SHIFT_RIGHT 1
 /*
 typedef struct {
 	int16_t x;
@@ -237,6 +245,9 @@ class KB
 	void noTone();
 	void song(std::vector<int> notes,int duration);
 	//======== DotMatrix display ===========//
+	bool getPixel(int16_t x, int16_t y);
+	void display(double x1, double y1, int TYPE);
+	void moveDisplay(int TYPE);
 	void clearDisplay();
 	void setBrightness(uint8_t b);
 	void scroll(String text,int lapTime = 50);
