@@ -277,7 +277,14 @@ void KB::display(double x1, double y1, int TYPE) // For KIDBRIGHT32ix ONLY - KRI
     break;
   case 3: // BARGRAPH
     bar = 0;
-    if((uint8_t)x1 >= 8) y -= 8;
+    if((uint8_t)x1 >= 8) 
+    {
+      y -= 8;
+      matrix.displaybuffer[x] &= 0x00FF;
+    }
+    else{
+      matrix.displaybuffer[x] &= 0xFF00;
+    }
     for (i = 0; i <= y; ++i)
     {
       bar = (bar << 1) + 1;
