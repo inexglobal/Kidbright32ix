@@ -8,6 +8,13 @@ iRGBLED::iRGBLED(int16_t pin, uint16_t num)
 }
 void iRGBLED::begin()
 {
+#if defined(_KB_H_)
+    if (iRGBLEDPin == 0 ||
+        (iRGBLEDPin != 32 && iRGBLEDPin != 33 && iRGBLEDPin != 34 &&
+         iRGBLEDPin != 35 && iRGBLEDPin != 18 && iRGBLEDPin != 19 && iRGBLEDPin != 23
+         && iRGBLEDPin != 26 && iRGBLEDPin != 27))
+        return;
+#endif
     neopixel.updateLength(iRGBLEDNum);
     neopixel.setPin(iRGBLEDPin);
     neopixel.begin();
@@ -27,6 +34,21 @@ void iRGBLED::iRGBLEDPixelColor(uint16_t n, uint32_t color)
     if (!isiRGBLEDBegun)
         return;
     neopixel.setPixelColor(n, color);
+    neopixel.show();
+}
+void iRGBLED::iRGBLEDFill(uint8_t r, uint8_t g, uint8_t b)
+{
+    if (!isiRGBLEDBegun)
+        return;
+    uint32_t result = iRGBColor(r, g, b);
+    neopixel.fill(result, 0, iRGBLEDNum);
+    neopixel.show();
+}
+void iRGBLED::iRGBLEDFill(uint32_t color)
+{
+    if (!isiRGBLEDBegun)
+        return;
+    neopixel.fill(color, 0, iRGBLEDNum);
     neopixel.show();
 }
 void iRGBLED::iRGBLEDBrightness(uint8_t brightness)

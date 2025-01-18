@@ -11,6 +11,8 @@ public:
     void begin();
     void iRGBLEDPixelColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b);
     void iRGBLEDPixelColor(uint16_t n, uint32_t color);
+    void iRGBLEDFill(uint8_t r, uint8_t g, uint8_t b);
+    void iRGBLEDFill(uint32_t color);
     void iRGBLEDBrightness(uint8_t brightness);
     void iRGBLEDClear();
     static uint32_t iRGBColor(uint8_t r, uint8_t g, uint8_t b)
