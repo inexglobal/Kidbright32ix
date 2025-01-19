@@ -9,6 +9,9 @@
 #include "Adafruit_GFX.h"		  // DotMatrix display
 #include "Adafruit_LEDBackpack.h" // DotMatrix display
 
+#include "freeRTOS\freeRTOS.h"
+#include "freeRTOS\task.h"
+
 #include "driver/adc.h"
 #include "time.h" // Library Internet time
 
